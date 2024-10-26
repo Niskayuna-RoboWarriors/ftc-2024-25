@@ -15,7 +15,7 @@ public class GamepadWrapper {
 
     /**
      * initialize with gamepad
-     * @param gamepad
+     * @param gamepad the gamepad
      */
     public GamepadWrapper(Gamepad gamepad) {
         this.current = gamepad;
@@ -32,8 +32,8 @@ public class GamepadWrapper {
 
     /**
      * returns true if a button that was not pressed in prev but is now pressed
-      * @param button
-     * @return
+      * @param button the button being fetched
+     * @return if button was pressed
      */
     public boolean isPressed(Buttons button) {
         switch (button) {
@@ -57,8 +57,7 @@ public class GamepadWrapper {
                 return current.x && !previous.x || current.square && !previous.square;
             case Y:
                 return current.y && !previous.y || current.triangle && !previous.triangle;
-            default:
-                throw new Error("requested button does not exist");
         }
+        return false;
     }
 }
