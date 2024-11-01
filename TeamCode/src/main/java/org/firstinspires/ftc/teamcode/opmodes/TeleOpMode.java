@@ -22,6 +22,7 @@ public class TeleOpMode extends OpMode {
         driver = new GamepadWrapper(gamepad1);
         operator = new GamepadWrapper(gamepad2);
         drive = new MecanumDrive(hardwareMap);
+
         // init some other things
         telemetry.log().add("initialized");
     }
