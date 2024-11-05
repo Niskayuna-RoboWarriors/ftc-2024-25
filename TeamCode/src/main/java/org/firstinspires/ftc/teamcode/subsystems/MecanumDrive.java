@@ -8,6 +8,9 @@ import org.firstinspires.ftc.teamcode.util.Position;
 
 
 // basically replacement for navigation class (not really**)
+// subsystem code is intended be a wrapper for subsystems
+// code should be limited to a minimum for functionality
+// advanced control such as pathing, should not be implemented in this directory
 public class MecanumDrive {
     protected DcMotor frontLeft, frontRight, rearLeft, rearRight;
     protected static final double MINIMUM_POWER = 0.001; // defines the point at which robot will stop trying to move
@@ -72,11 +75,11 @@ public class MecanumDrive {
         double powerSet2 = Math.sin(strafeDirection) - Math.cos(strafeDirection);
 
         // this process is probably improvable
-        double frontRightPower = powerSet2 * strafePower - turnPower;
-        double rearLeftPower = powerSet2 * strafePower + turnPower;
+        double frontRightPower = powerSet2 * strafePower + turnPower;
+        double rearLeftPower = powerSet2 * strafePower - turnPower;
 
-        double rearRightPower = powerSet1 * strafePower - turnPower;
-        double frontLeftPower = powerSet1 * strafePower + turnPower;
+        double rearRightPower = powerSet1 * strafePower + turnPower;
+        double frontLeftPower = powerSet1 * strafePower - turnPower;
 
         double scale = Math.max(Math.max(Math.abs(frontRightPower), Math.abs(frontLeftPower)), Math.max(Math.abs(rearRightPower), Math.abs(rearLeftPower)));
 

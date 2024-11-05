@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 // wrapper for gamepad to remove some boiler code
 // trying to make a lighter wrapper for simplicity
-public class GamepadWrapper {
+public class GamepadWrapper extends Gamepad{
     // all the possible buttons
     public enum Buttons {
         LEFT_BUMPER, RIGHT_BUMPER,

@@ -10,12 +10,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  */
 public class LinearSlides {
     protected DcMotor motor;
+    protected int MAX = Integer.MAX_VALUE, MIN = Integer.MIN_VALUE;
 
     /**
      * initialize basic things on motor
      * @param _motor the motor to initialize
      */
-    public LinearSlides(DcMotor _motor) {
+    protected LinearSlides(DcMotor _motor) {
         motor = _motor;
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setDirection(DcMotor.Direction.FORWARD);
@@ -30,8 +31,19 @@ public class LinearSlides {
     public LinearSlides(HardwareMap hardwareMap) {
         // gets the motor from hardware map
         this(hardwareMap.get(DcMotor.class, "slides"));
+        // MAX = something
+        // MIN = something
     }
-    public void runTo(int position) {
+    public void moveTo(int position) {
+        position = Math.min(position, MAX);
+        position = Math.max(position, MIN);
         motor.setTargetPosition(position);
+    }
+
+    public int getTargetPosition() {
+        return motor.getTargetPosition();
+    }
+    public int getPosition() {
+        return motor.getCurrentPosition();
     }
 }
