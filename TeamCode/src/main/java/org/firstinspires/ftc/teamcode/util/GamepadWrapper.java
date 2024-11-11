@@ -11,22 +11,43 @@ public class GamepadWrapper extends Gamepad{
         DPAD_UP, DPAD_DOWN, DPAD_RIGHT, DPAD_LEFT,
         B, X, Y, A
     }
-    Gamepad current, previous =  new Gamepad();
+    Gamepad current = new Gamepad(), previous = new Gamepad(), gamepad;
+
+    private final float ANALOG_DEAD_ZONE = 0.001f;
+
+    private boolean isInvertedY = false;
 
     /**
      * initialize with gamepad
      * @param gamepad the gamepad
      */
     public GamepadWrapper(Gamepad gamepad) {
-        this.current = gamepad;
+        this.gamepad = gamepad;
         this.update();
+    }
+
+    public GamepadWrapper(Gamepad gamepad, boolean isInvertedY) {
+        this(gamepad);
+        this.isInvertedY = isInvertedY;
     }
 
     /**
      * updates previous
      */
-    public void update() {
-        previous.copy(this.current);
+    public synchronized void update() { // synchronized cuz intellij got mad at me
+        this.copy(this.gamepad);
+        previous = current;
+        current.copy(this.gamepad);
+        if (isInvertedY) {
+            this.left_stick_y = -this.left_stick_y;
+            this.right_stick_y = -this.right_stick_y;
+        }
+        if (Math.abs(this.left_trigger) < ANALOG_DEAD_ZONE) this.left_trigger = 0.0f;
+        if (Math.abs(this.right_trigger) < ANALOG_DEAD_ZONE) this.right_trigger = 0.0f;
+        if (Math.abs(this.left_stick_x) < ANALOG_DEAD_ZONE) this.left_stick_x = 0.0f;
+        if (Math.abs(this.left_stick_y) < ANALOG_DEAD_ZONE) this.left_stick_y = 0.0f;
+        if (Math.abs(this.right_stick_y) < ANALOG_DEAD_ZONE) this.right_stick_x = 0.0f;
+        if (Math.abs(this.right_stick_x) < ANALOG_DEAD_ZONE) this.right_stick_y = 0.0f;
     }
 
 

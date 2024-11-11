@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlides;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.util.GamepadWrapper;
+
+import java.util.List;
 
 @TeleOp(name="Tele-Op", group="TeleOp OpMode")
 public class TeleOpMode extends OpMode {
@@ -14,20 +18,35 @@ public class TeleOpMode extends OpMode {
     protected GamepadWrapper driver, operator;
     protected MecanumDrive drive;
     protected LinearSlides slides;
+    List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
 
     /**
      * called once when init button is pressed
      */
     @Override
     public void init() {
-        telemetry.log().add("initializing"); // idk if log actually works, guess we'll see.
+        telemetry.addLine("Initializing");
+
+
+        // every time you look up a sensor value or something, it will send a hardware call
+        // hardware calls take a couple milliseconds (slow) but will add up if called many times over a loop
+        // bulk read reads ALL the sensor values at once with a single hardware call and caches the values
+        // this is the same cost as reading a single sensor value, so it helps performance
+        // bulk read is OFF by default, AUTO automatically updates when you read the same sensor value twice
+        // MANUAL only updates when clearBulkCache is manually invoked, *USE MANUAL WITH CAUTION*
+        //for (LynxModule hub : allHubs) {
+        //    hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        //}
+
         driver = new GamepadWrapper(gamepad1);
         operator = new GamepadWrapper(gamepad2);
+
+        Subsystem.globalSubSystemTelemetry = true;
         drive = new MecanumDrive(hardwareMap);
         slides = new LinearSlides(hardwareMap);
 
         // init some other things
-        telemetry.log().add("initialized");
+        telemetry.addLine("Initialized");
     }
 
     /**
@@ -35,7 +54,7 @@ public class TeleOpMode extends OpMode {
      */
     @Override
     public void start() {
-        telemetry.log().add("starting");
+        telemetry.addLine("starting");
     }
 
     /**
@@ -43,6 +62,11 @@ public class TeleOpMode extends OpMode {
      */
     @Override
     public void loop() {
+        // perform bulk read
+        //for (LynxModule hub : allHubs) {
+        //    hub.clearBulkCache();
+        //}
+
         // telemetry.addData(String caption, Object value), simple call for 1 data values
 
         // telemetry.addData(String caption, String format, Object... args), multiple data values
@@ -59,13 +83,9 @@ public class TeleOpMode extends OpMode {
         // read controller inputs
 
         // random function to control slides for now, just for testing purposes
-        if (operator.isPressed(GamepadWrapper.Buttons.DPAD_UP)) {
-            slides.moveTo(slides.getPosition()+20);
-        }
-        if (operator.isPressed(GamepadWrapper.Buttons.DPAD_DOWN)) {
-            slides.moveTo(slides.getPosition()-20);
-        }
-        telemetry.addData("Linear Slides ", "%d target %d", slides.getPosition(), slides.getTargetPosition());
+        slides.setVelocity(operator.left_stick_y);
+
+        slides.update(telemetry);
 
         // drive stuff
 
@@ -77,7 +97,7 @@ public class TeleOpMode extends OpMode {
         double turn = driver.right_stick_x;
         drive.moveIn(strafeDirection, strafePower, turn);
 
-        telemetry.addData("Moving ", "in %.1f rad at %.1f, turning %.1f", strafeDirection, strafePower, turn);
+        telemetry.addData("Moving:", "in %.1f rad at %.1f, turning %.1f", strafeDirection, strafePower, turn);
 
         telemetry.update();
     }

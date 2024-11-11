@@ -27,16 +27,13 @@ public class LinearSlidesTest extends LinearOpMode {
 
         while(opModeIsActive()) {
             count++;
-            telemetry.addData("Time", "%d ms, %0.2f u/s", elapsedTime.milliseconds(), elapsedTime.milliseconds()/(double)count/1000);
+            telemetry.addData("Time", "%d ms, %0.2f Hz", elapsedTime.milliseconds(), elapsedTime.milliseconds()/(double)count/1000);
 
-            if (operator.isPressed(GamepadWrapper.Buttons.DPAD_UP)) {
-                slides.moveTo(slides.getPosition()+20); // i think 20 is too small but i forgot to update telemetry
-            }
-            if (operator.isPressed(GamepadWrapper.Buttons.DPAD_DOWN)) {
-                slides.moveTo(slides.getPosition()-20);
-            }
+            operator.update();
 
-            telemetry.addData("Linear Slides ", "%d target %d", slides.getPosition(), slides.getTargetPosition());
+            slides.setVelocity(operator.left_stick_y);
+
+            slides.update(telemetry);
 
             telemetry.update();
         }
