@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 // import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Position;
 
 
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.util.Position;
 // subsystem code is intended be a wrapper for subsystems
 // code should be limited to a minimum for functionality
 // advanced control such as pathing, should not be implemented in this directory
-public class MecanumDrive {
+public class MecanumDrive extends Subsystem {
     protected DcMotor frontLeft, frontRight, rearLeft, rearRight;
     protected static final double MINIMUM_POWER = 0.001; // defines the point at which robot will stop trying to move
 
@@ -94,4 +95,13 @@ public class MecanumDrive {
         rearLeft.setPower(rearLeftPower);
     }
 
+    @Override
+    protected void update() {
+
+    }
+
+    @Override
+    protected void telemetry(Telemetry telemetry) {
+
+    }
 }

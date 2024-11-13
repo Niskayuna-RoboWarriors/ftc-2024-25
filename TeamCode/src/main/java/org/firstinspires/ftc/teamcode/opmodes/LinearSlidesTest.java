@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlides;
 import org.firstinspires.ftc.teamcode.util.GamepadWrapper;
 
@@ -20,16 +22,20 @@ public class LinearSlidesTest extends LinearOpMode {
 
         waitForStart();
 
+        ElapsedTime elapsedTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        int count = 0;
+
         while(opModeIsActive()) {
+            count++;
+            telemetry.addData("Time", "%d ms, %0.2f Hz", elapsedTime.milliseconds(), elapsedTime.milliseconds()/(double)count/1000);
 
-            if (operator.isPressed(GamepadWrapper.Buttons.DPAD_UP)) {
-                slides.moveTo(slides.getPosition()+20);
-            }
-            if (operator.isPressed(GamepadWrapper.Buttons.DPAD_DOWN)) {
-                slides.moveTo(slides.getPosition()-20);
-            }
+            operator.update();
 
-            telemetry.addData("Linear Slides ", "%d target %d", slides.getPosition(), slides.getTargetPosition());
+            slides.setVelocity(operator.left_stick_y);
+
+            slides.update(telemetry);
+
+            telemetry.update();
         }
     }
 }
