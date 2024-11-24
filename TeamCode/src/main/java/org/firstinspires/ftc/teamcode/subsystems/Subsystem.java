@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public abstract class Subsystem {
-    public static boolean globalSubSystemTelemetry = true;
+    public static boolean globalSubsystemTelemetry = true;
     public boolean componentTelemetry = false;
     /**
      * Update() is intended to be called every loop iteration regardless of desired state change
@@ -20,7 +20,7 @@ public abstract class Subsystem {
      */
     public final void update(Telemetry telemetry) {
         update();
-        if (globalSubSystemTelemetry || componentTelemetry) {
+        if (globalSubsystemTelemetry || componentTelemetry) {
             telemetry(telemetry);
         }
     }

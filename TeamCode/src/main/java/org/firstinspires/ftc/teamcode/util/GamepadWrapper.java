@@ -11,7 +11,9 @@ public class GamepadWrapper extends Gamepad{
         DPAD_UP, DPAD_DOWN, DPAD_RIGHT, DPAD_LEFT,
         B, X, Y, A
     }
-    Gamepad current = new Gamepad(), previous = new Gamepad(), gamepad;
+    public Gamepad current = new Gamepad();
+    public Gamepad previous = new Gamepad();
+    Gamepad gamepad;
 
     private final float ANALOG_DEAD_ZONE = 0.001f;
 
@@ -35,9 +37,11 @@ public class GamepadWrapper extends Gamepad{
      * updates previous
      */
     public synchronized void update() { // synchronized cuz intellij got mad at me
-        this.copy(this.gamepad);
-        previous = current;
+        previous.copy(current);
         current.copy(this.gamepad);
+
+        this.copy(this.gamepad);
+
         if (isInvertedY) {
             this.left_stick_y = -this.left_stick_y;
             this.right_stick_y = -this.right_stick_y;

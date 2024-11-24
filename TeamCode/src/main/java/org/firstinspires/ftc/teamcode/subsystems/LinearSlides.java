@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Basically a wrapper for DcMotor
@@ -26,7 +25,7 @@ public class LinearSlides extends Subsystem {
 
     protected DcMotorEx motor;
     protected int MAX = 20000, MIN = 0;
-    protected double MAX_VELOCITY = 2000;
+    protected double MAX_VELOCITY = 500;
     protected int desiredPosition, currentPosition;
     protected double desiredVelocity, currentVelocity;
     protected boolean isVelocityControl = false;
@@ -47,7 +46,8 @@ public class LinearSlides extends Subsystem {
         //        new PIDFCoefficients(0, 0, 0, 0)
         //);
 
-        motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        //motor.setTargetPosition(0);
+        //motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         //motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
     }
@@ -77,23 +77,34 @@ public class LinearSlides extends Subsystem {
     protected void update() {
         currentPosition = motor.getCurrentPosition();
         currentVelocity = motor.getVelocity();
+
         if (isVelocityControl) {
-            if (desiredVelocity == 0.0 || currentPosition > MAX) {
-                motor.setTargetPosition(Range.clip(currentPosition, MIN, MAX));
-            } else {
-                motor.setVelocity(desiredVelocity);
+            motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            double velocity = desiredVelocity;
+            if (currentPosition > MAX) {
+                velocity = Range.clip(currentVelocity, -MAX_VELOCITY, 0);
+            } else if (currentPosition < MIN) {
+                velocity = Range.clip(currentVelocity, 0, MAX_VELOCITY);
             }
+            motor.setVelocity(velocity);
         } else {
             motor.setTargetPosition(desiredPosition);
+            motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         }
     }
 
     @Override
     protected void telemetry(Telemetry telemetry) {
-        telemetry.addData("Linear Slides",
-                isVelocityControl ? "Velocity Control: %0.2f Desired %0.2f" : "Position Control: %d Desired %d",
-                isVelocityControl ? this.currentVelocity : this,currentPosition,
-                isVelocityControl ? this.desiredVelocity : this.desiredPosition
-                );
+        telemetry.addData("Slides:", "Position: Min %d Current %d Max %d Velocity: %.2f", MIN, currentPosition, MAX, currentVelocity);
+        if (isVelocityControl) {
+            telemetry.addData("Slides: Velocity Control: Desired", desiredVelocity);
+            // telemetry.addData("Current velocity:", this.currentVelocity);
+            // telemetry.addData("Current desired velocity", this.desiredVelocity);
+            //telemetry.addData("Slides: Velocity Control:", "%.2f Desired %.2f", currentVelocity, desiredVelocity);
+        } else {
+            telemetry.addData("Slides: Position Control: Desired", desiredPosition);
+            //telemetry.addData("Current position:", this.currentPosition);
+            //telemetry.addData("Current desired position:", this.desiredPosition);
+        }
     }
 }
