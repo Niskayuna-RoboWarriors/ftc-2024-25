@@ -25,7 +25,7 @@ public class LinearSlides extends Subsystem {
 
     protected DcMotorEx motor;
     protected int MAX = 20000, MIN = 0;
-    protected double MAX_VELOCITY = 500;
+    protected double MAX_VELOCITY = 250;
     protected int desiredPosition, currentPosition;
     protected double desiredVelocity, currentVelocity;
     protected boolean isVelocityControl = false;
@@ -98,13 +98,8 @@ public class LinearSlides extends Subsystem {
         telemetry.addData("Slides:", "Position: Min %d Current %d Max %d Velocity: %.2f", MIN, currentPosition, MAX, currentVelocity);
         if (isVelocityControl) {
             telemetry.addData("Slides: Velocity Control: Desired", desiredVelocity);
-            // telemetry.addData("Current velocity:", this.currentVelocity);
-            // telemetry.addData("Current desired velocity", this.desiredVelocity);
-            //telemetry.addData("Slides: Velocity Control:", "%.2f Desired %.2f", currentVelocity, desiredVelocity);
         } else {
             telemetry.addData("Slides: Position Control: Desired", desiredPosition);
-            //telemetry.addData("Current position:", this.currentPosition);
-            //telemetry.addData("Current desired position:", this.desiredPosition);
         }
     }
 }
