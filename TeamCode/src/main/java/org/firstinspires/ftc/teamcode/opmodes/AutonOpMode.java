@@ -13,8 +13,16 @@ public class AutonOpMode extends LinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException {
         // initialize stuff
+
+
         // run stuff
+
+
+
         // do stuff
+
+
+
         // auton
     }
 }
