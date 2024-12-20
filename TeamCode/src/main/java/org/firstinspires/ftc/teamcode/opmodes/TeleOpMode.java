@@ -18,7 +18,8 @@ public class TeleOpMode extends OpMode {
     protected GamepadWrapper driver, operator;
     protected MecanumDrive drive;
     protected LinearSlides slides;
-    List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
+    protected int count = 0;
+    //List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
 
     /**
      * called once when init button is pressed
@@ -41,7 +42,7 @@ public class TeleOpMode extends OpMode {
         driver = new GamepadWrapper(gamepad1);
         operator = new GamepadWrapper(gamepad2);
 
-        Subsystem.globalSubSystemTelemetry = true;
+        Subsystem.globalSubsystemTelemetry = true;
         drive = new MecanumDrive(hardwareMap);
         slides = new LinearSlides(hardwareMap);
 
@@ -62,19 +63,22 @@ public class TeleOpMode extends OpMode {
      */
     @Override
     public void loop() {
+        // telemetry.addData(String caption, Object value), simple call for 1 data values
+
+        // telemetry.addData(String caption, String format, Object... args), multiple data values
+        // in format string, %.1f is a float displayed with 1 decimal place. %d is used for an integers, etc.
+        // In "Object..." the "..." is known as varargs, it allows a function to take any number of parameters
+
+        // telemetry.addLine(String s), this is how you just write a line with a string.
+        // It's not telemetry.addData("words", null); that's just dumb.
+
+        telemetry.addData("Time", "%.2f ms %.2f Hz", elapsedTime.milliseconds(), (double)count/(elapsedTime.milliseconds()/1000.0));
+
         // perform bulk read
         //for (LynxModule hub : allHubs) {
         //    hub.clearBulkCache();
         //}
 
-        // telemetry.addData(String caption, Object value), simple call for 1 data values
-
-        // telemetry.addData(String caption, String format, Object... args), multiple data values
-
-        // the format string takes %.1f to mean a floating point value displayed with 1 digit past decimal point
-        // %d is used for an integer, there's more, you can search for them
-        // In "Object..." the "..." is known as varargs, it allows a function to take any number of parameters
-        // It's basically just a shortcut for an array though, so nothing special
 
         // update gamepad wrappers
         driver.update();
