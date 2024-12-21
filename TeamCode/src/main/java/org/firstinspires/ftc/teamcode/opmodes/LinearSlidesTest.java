@@ -18,7 +18,7 @@ public class LinearSlidesTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         LinearSlides slides = new LinearSlides(hardwareMap);
-        GamepadWrapper operator = new GamepadWrapper(gamepad2);
+        GamepadWrapper operator = new GamepadWrapper(gamepad2, true);
 
         telemetry.addLine("working");
         telemetry.update();

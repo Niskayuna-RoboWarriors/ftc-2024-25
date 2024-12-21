@@ -23,9 +23,7 @@ public abstract class Claw extends Subsystem {
 
     public void initClaw(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "claw servo");
-        PwmControl pwm = (PwmControl) claw;
-        pwm.setPwmEnable();
-        claw.setDirection(FORWARD);
+        // claw.setDirection(FORWARD);
     }
 
 
@@ -35,7 +33,7 @@ public abstract class Claw extends Subsystem {
     protected void closeClaw(){
         claw.setPosition(claw.MIN_POSITION);
     }
-    protected void increaseClawRotation(){
+    protected void increaseClawRotation() { // i don't recommend
 
         clawRotator.setPosition(clawRotator.getPosition()+1);
 
@@ -46,13 +44,13 @@ public abstract class Claw extends Subsystem {
 
     }
 
-    protected void onRecieveInput(){
+    protected void onRecieveInput(){ // what does this functino do?
         desiredPosition = tempTestInput;
     }
 
     @Override
-    protected void update() {
-
+    protected void update() { // tbh just leave the update function blank
+/*
         switch (desiredPosition){
             case 1:
                 openClaw();
@@ -67,12 +65,17 @@ public abstract class Claw extends Subsystem {
                 decreaseClawRotation();
                 desiredPosition = 5;
             default:
-                System.out.println("Error in update statement or input alreadu fulfilled: invalid input recieved");
+                System.out.println("Error in update statement or input already fulfilled: invalid input recieved");
+                // don't use println
+                // telemetry if you want to show anything for output
+                // i would just throw an exception/error if something goes wrong
         }
+*/
     }
 
     @Override
     protected void telemetry(Telemetry telemetry) {
-
+        telemetry.addData("Claw Position", claw.getPosition());
+        telemetry.addData("Claw Rotator Pos", clawRotator.getPosition());
     }
 }

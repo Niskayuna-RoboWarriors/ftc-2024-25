@@ -34,11 +34,11 @@ public class AutonOpMode extends LinearOpMode {
                 */
                 elapsedTime.reset();
                 while (elapsedTime.time() < 500) {
-                    MecanumDrive.moveIn(0, 20, 0);
+                    drive.moveIn(0, 20, 0);
                 }
-                MecanumDrive.moveIn(0, 0, 0); // This is how I assume it works.
+                drive.moveIn(0, 0, 0); // This is how I assume it works.
 
-                Claw. // TODO: drop
+                // Claw. // TODO: drop
             } else { // Should we try bringing the samples to the oberservation zone?
 
             }
@@ -51,7 +51,7 @@ public class AutonOpMode extends LinearOpMode {
     public void initSharedPreferences() {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.hardwareMap.appContext);
 
-        startingSidePref = sharedPrefs.getString("starting_side", "ERROR");
+        String startingSidePref = sharedPrefs.getString("starting_side", "ERROR");
         telemetry.addData("Starting side", startingSidePref);
         if (startingSidePref.equals("NET")) {
             startingSide = StartingSide.NET;

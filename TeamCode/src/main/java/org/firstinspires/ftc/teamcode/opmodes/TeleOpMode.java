@@ -39,8 +39,8 @@ public class TeleOpMode extends OpMode {
         //    hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         //}
 
-        driver = new GamepadWrapper(gamepad1);
-        operator = new GamepadWrapper(gamepad2);
+        driver = new GamepadWrapper(gamepad1, true);
+        operator = new GamepadWrapper(gamepad2, true);
 
         Subsystem.globalSubsystemTelemetry = true;
         drive = new MecanumDrive(hardwareMap);
@@ -72,6 +72,7 @@ public class TeleOpMode extends OpMode {
         // telemetry.addLine(String s), this is how you just write a line with a string.
         // It's not telemetry.addData("words", null); that's just dumb.
 
+        count++;
         telemetry.addData("Time", "%.2f ms %.2f Hz", elapsedTime.milliseconds(), (double)count/(elapsedTime.milliseconds()/1000.0));
 
         // perform bulk read

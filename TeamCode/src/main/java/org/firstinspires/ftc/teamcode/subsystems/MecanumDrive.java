@@ -31,7 +31,7 @@ public class MecanumDrive extends Subsystem {
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         rearLeft.setDirection(DcMotor.Direction.FORWARD);
-        rearRight.setDirection(DcMotor.Direction.FORWARD);
+        rearRight.setDirection(DcMotor.Direction.REVERSE);
 
         // sets motors to spin freely // BRAKE will actively resist movement
         // mecanum has basically no ability to resist movement. So I don't see why you would ever want brake
@@ -102,6 +102,8 @@ public class MecanumDrive extends Subsystem {
 
     @Override
     protected void telemetry(Telemetry telemetry) {
-
+        telemetry.addLine("Motor Powers");
+        telemetry.addData("Front\t", "%.3f, %.3f", frontLeft.getPower(), frontRight.getPower());
+        telemetry.addData("Rear\t", "%.3f, %.3f", rearLeft.getPower(), rearRight.getPower());
     }
 }

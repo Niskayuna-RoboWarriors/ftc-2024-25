@@ -24,8 +24,8 @@ public class LinearSlides extends Subsystem {
     // end of states
 
     protected DcMotorEx motor;
-    protected int MAX = 20000, MIN = 0;
-    protected double MAX_VELOCITY = 250;
+    protected int MAX = 17000, MIN = 0;
+    protected double MAX_VELOCITY = 4500;
     protected int desiredPosition, currentPosition;
     protected double desiredVelocity, currentVelocity;
     protected boolean isVelocityControl = false;
@@ -81,11 +81,8 @@ public class LinearSlides extends Subsystem {
         if (isVelocityControl) {
             motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             double velocity = desiredVelocity;
-            if (currentPosition > MAX) {
-                velocity = Range.clip(currentVelocity, -MAX_VELOCITY, 0);
-            } else if (currentPosition < MIN) {
-                velocity = Range.clip(currentVelocity, 0, MAX_VELOCITY);
-            }
+            if (currentPosition > MAX && velocity > 0) velocity = 0;
+            if (currentPosition < MIN && velocity < 0) velocity = 0;
             motor.setVelocity(velocity);
         } else {
             motor.setTargetPosition(desiredPosition);
