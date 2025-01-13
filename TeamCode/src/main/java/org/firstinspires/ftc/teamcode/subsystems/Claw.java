@@ -1,81 +1,64 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.Servo;
-//import org.firstinspires.ftc.robotcore.external.Telemetry;
-//pwm
-//import org.firstinpsires.ftc.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import static com.qualcomm.robotcore.hardware.Servo.Direction.FORWARD;
-
-
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.subsystems.LinearSlides;
+import org.firstinspires.ftc.teamcode.util.GamepadWrapper;
 
 /**
  * To be implemented
  */
-public abstract class Claw extends Subsystem {
-    Servo claw;
-    Servo clawRotator;
-    protected int desiredPosition;
-    private int tempTestInput;
-
-    public void initClaw(HardwareMap hardwareMap) {
-        claw = hardwareMap.get(Servo.class, "claw servo");
-        // claw.setDirection(FORWARD);
-    }
-
-
-    protected void openClaw(){
-        claw.setPosition(claw.MAX_POSITION);
-    }
-    protected void closeClaw(){
-        claw.setPosition(claw.MIN_POSITION);
-    }
-    protected void increaseClawRotation() { // i don't recommend
-
-        clawRotator.setPosition(clawRotator.getPosition()+1);
-
-    }
-    protected void decreaseClawRotation(){
-
-        clawRotator.setPosition(clawRotator.getPosition()-1);
-
-    }
-
-    protected void onRecieveInput(){ // what does this functino do?
-        desiredPosition = tempTestInput;
-    }
-
+@TeleOp(name="Servo Test", group="Testing")
+public class Claw extends LinearOpMode {
     @Override
-    protected void update() { // tbh just leave the update function blank
-/*
-        switch (desiredPosition){
-            case 1:
-                openClaw();
-                desiredPosition = 5;
-            case 2:
-                closeClaw();
-                desiredPosition = 5;
-            case 3:
-                increaseClawRotation();
-                desiredPosition = 5;
-            case 4:
-                decreaseClawRotation();
-                desiredPosition = 5;
-            default:
-                System.out.println("Error in update statement or input already fulfilled: invalid input recieved");
-                // don't use println
-                // telemetry if you want to show anything for output
-                // i would just throw an exception/error if something goes wrong
+    public void runOpMode() throws InterruptedException {
+        GamepadWrapper operator = new GamepadWrapper(gamepad2);
+
+        Servo servo = hardwareMap.get(Servo.class, "servo");
+
+        telemetry.addLine("working");
+        telemetry.update();
+
+        waitForStart();
+
+        ElapsedTime elapsedTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        int count = 0;
+        double position = servo.getPosition();
+
+        while(opModeIsActive()) {
+            count++;
+            telemetry.addData("Time", "%.2f ms %.2f Hz", elapsedTime.milliseconds(), (double)count/(elapsedTime.milliseconds()/1000.0));
+
+            operator.update();
+
+            if (operator.isPressed(GamepadWrapper.Buttons.DPAD_UP)) {
+                position += 0.01;
+            }
+
+            if (operator.isPressed(GamepadWrapper.Buttons.DPAD_RIGHT)) {
+                position += 0.001;
+            }
+
+            if (operator.isPressed(GamepadWrapper.Buttons.DPAD_DOWN)) {
+                position -= 0.01;
+            }
+
+            if (operator.isPressed(GamepadWrapper.Buttons.DPAD_LEFT)) {
+                position -= 0.001;
+            }
+
+            servo.setPosition(position);
+
+            telemetry.addData("Desired", servo.getPosition());
+
+            telemetry.update();
         }
-*/
     }
 
-    @Override
-    protected void telemetry(Telemetry telemetry) {
-        telemetry.addData("Claw Position", claw.getPosition());
-        telemetry.addData("Claw Rotator Pos", clawRotator.getPosition());
-    }
 }
