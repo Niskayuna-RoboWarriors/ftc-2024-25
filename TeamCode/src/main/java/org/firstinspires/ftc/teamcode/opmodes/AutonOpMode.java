@@ -32,15 +32,23 @@ public class AutonOpMode extends LinearOpMode {
                 /* Drive forward, do we want a dedicated navigation file? This sucks and we need to test it anyways.
                    It would be better if we had one function that could move the robot anywhere.
                 */
-                elapsedTime.reset();
-                while (elapsedTime.time() < 500) {
-                    drive.moveIn(0, 20, 0);
-                }
-                drive.moveIn(0, 0, 0); // This is how I assume it works.
-
+//                elapsedTime.reset();
+//                while (elapsedTime.time() < 500) {
+//                    drive.moveIn(0, 20, 0);
+//                }
+//                drive.moveIn(0, 0, 0); // This is how I assume it works.
+                telemetry.addLine("NET");
+                telemetry.update();
                 // Claw. // TODO: drop
             } else { // Should we try bringing the samples to the oberservation zone?
-
+                // nah just park
+                telemetry.addLine("OBSERVATION");
+                telemetry.update();
+                elapsedTime.reset();
+                while (elapsed.time() < 1500) {
+                    drive.moveIn(0, 20, 0);
+                }
+                drive.moveIn(0,0,0);
             }
         }
         // do stuff
